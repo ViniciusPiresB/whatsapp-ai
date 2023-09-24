@@ -5,7 +5,7 @@ const venomClient = await create({
   disableWelcome: true
 });
 
-venomClient.onMessage((message) => {
+venomClient.onMessage(message => {
   if (!message.body || message.isGroupMsg || message.from == "status@broadcast")
     return;
 
