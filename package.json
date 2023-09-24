@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules src/server.ts"
+    "start": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "venom-bot": "^5.0.21"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",
