@@ -1,10 +1,12 @@
 import { create } from "venom-bot";
 import ChatGPT from "./modules/chatGpt";
-import { prompt } from "./modules/chatGpt/prompts/prompt";
+import { getPrompt } from "./modules/chatGpt/prompts/prompt";
 
 (async () => {
   const venomClient = await create({ session: "test", disableWelcome: true });
 
+  const prompt = await getPrompt();
+  console.log(prompt);
   const chatGpt = new ChatGPT(prompt);
 
   venomClient.onMessage(async message => {
