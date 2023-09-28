@@ -19,7 +19,7 @@ export default class ChatGPT {
 
   async completion(messageContent: string) {
     const message: ChatCompletionRequestMessage = {
-      role: "system",
+      role: "user",
       content: messageContent
     };
 
@@ -35,6 +35,14 @@ export default class ChatGPT {
     const gptResponse = completion.data.choices[0].message;
 
     if (!gptResponse) throw new Error("Error on chatgpt response!");
+
+    const assistantResponse: ChatCompletionRequestMessage = {
+      role: "user",
+      content: gptResponse.content
+    };
+
+    this.setMessage(assistantResponse);
+    console.log(messages);
 
     return gptResponse.content;
   }
