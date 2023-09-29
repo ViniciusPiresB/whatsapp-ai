@@ -1,29 +1,27 @@
 import { ChatCompletionRequestMessage, OpenAIApi } from "openai";
 import { getOpenAiApi } from "./config/getOpenAiApi";
+import { getPrompt } from "./prompts/prompt";
 
 export default class ChatGPT {
   openAI: OpenAIApi;
-  messages: ChatCompletionRequestMessage[] = [];
+  messages: { [messageFrom: string]: ChatCompletionRequestMessage[] } = {};
 
-  constructor(startPrompt: string) {
+  constructor() {
     const openAiApi = getOpenAiApi();
-
-    const message: ChatCompletionRequestMessage = {
-      role: "system",
-      content: startPrompt
-    };
-
     this.openAI = openAiApi;
-    this.setMessage(message);
   }
 
-  async completion(messageContent: string) {
+  async completion(messageContent: string, messageFrom: string) {
+    await this.checkFirstMessage(messageFrom);
+
     const message: ChatCompletionRequestMessage = {
       role: "user",
       content: messageContent
     };
 
-    const messages = this.setMessage(message);
+    const messages = this.setMessage(message, messageFrom);
+
+    console.log(messages);
 
     const completion = await this.openAI.createChatCompletion({
       model: "gpt-3.5-turbo",
@@ -41,15 +39,34 @@ export default class ChatGPT {
       content: gptResponse.content
     };
 
-    this.setMessage(assistantResponse);
+    this.setMessage(assistantResponse, messageFrom);
     console.log(messages);
 
     return gptResponse.content;
   }
 
-  setMessage(message: ChatCompletionRequestMessage) {
-    this.messages.push(message);
+  setMessage(message: ChatCompletionRequestMessage, messageFrom: string) {
+    const messages = this.messages[messageFrom];
 
-    return this.messages;
+    if (!messages) this.messages[messageFrom] = [];
+
+    this.messages[messageFrom].push(message);
+
+    return this.messages[messageFrom];
+  }
+
+  async checkFirstMessage(messageFrom: string) {
+    const messages = this.messages[messageFrom];
+
+    if (messages) return;
+
+    const initPrompt = await getPrompt();
+
+    const message: ChatCompletionRequestMessage = {
+      role: "system",
+      content: initPrompt
+    };
+
+    this.setMessage(message, messageFrom);
   }
 }

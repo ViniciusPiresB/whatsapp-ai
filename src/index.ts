@@ -5,26 +5,29 @@ import { updateSettings } from "./helper/updateSettings";
 import { getSettings } from "./helper/getSettings";
 
 (async () => {
-  const venomClient = await create({ session: "test", disableWelcome: true });
-
-  const prompt = await getPrompt();
+  const venomClient = await create({
+    session: "test",
+    disableWelcome: true
+  });
 
   const settings = await getSettings();
 
   const canAnswerGroup = settings.canAnswerGroup;
 
-  const chatGpt = new ChatGPT(prompt);
+  const chatGpt = new ChatGPT();
 
-  venomClient.onMessage(async message => {
+  venomClient.onMessage(async (message) => {
     const start = performance.now();
 
     if (!message.body || message.from == "status@broadcast") return;
+
+    if (message.from == "556292342844@c.us") return;
 
     if (!canAnswerGroup) {
       if (message.isGroupMsg) return;
     }
 
-    const responseGpt = await chatGpt.completion(message.body);
+    const responseGpt = await chatGpt.completion(message.body, message.from);
 
     if (!responseGpt) return;
 
