@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { promptService } from "../service/prompt.route";
+import { promptService } from "../service/prompt.service";
 
 export class PromptController {
   public getPrompt(req: Request, res: Response) {
@@ -10,6 +10,8 @@ export class PromptController {
 
   public setPrompt(req: Request, res: Response) {
     const { prompt } = req.body;
+
+    console.log(prompt);
 
     const serviceResponse = promptService.setPrompt(prompt);
 

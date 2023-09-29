@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { promptRouter } from "./route/prompt.route";
+import { settingsRouter } from "./route/settints.route";
 
 class App {
   public app: express.Application;
@@ -21,6 +22,7 @@ class App {
 
   route() {
     this.app.use("/prompt", promptRouter);
+    this.app.use("/settings", settingsRouter);
   }
 }
 
