@@ -81,7 +81,7 @@ body {
 }
 
 .form-control-vertical {
-  min-height: 150px;
+  height: 170px;
   resize: none;
 }
 
